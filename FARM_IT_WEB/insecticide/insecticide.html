@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insecticide_page</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/job_page/job.css">
+    <link rel="stylesheet" href="/btnstyle.css">
+</head>
+
+<body>
+    <nav class="nav-bar">
+
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/home_page/home.html" target="_self">Home</a></li>
+            <li><a href="/profile_page/profile.html" target="_self">Profile</a></li>
+            <li><a href="/crops/crops.html" target="_self">Crops</a></li>
+            <li><a href="/insecticide/insecticide.html" target="_self">Insecticide</a></li>
+            <li><a href="/pesticide/pesticide.html" target="_self">Pesticides</a></li>
+            <li><a href="/job_page/job.html" target="_self">Job</a></li>
+            <li><a href="/sell_page/sell.html" target="_self">Instrument</a></li>
+            <li><select id="dropdown">
+                    <option value="#">Add</option>
+                    <option value="option1">Add Crops</option>
+                    <option value="option2">Add Jobs</option>
+                    <option value="option3">Add Insecticide</option>
+                    <option value="option4">Add Pesticides</option>
+                    <option value="option5">Add Instrument</option>
+                </select></li>
+            <li><a id="logout" target="_self">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="tableform">
+        <table>
+            <thead>
+                <tr>
+                    <th>image</th>
+                    <th>Cost of product</th>
+                    <th>Ownername</th>
+                    <th>Insecticide Name</th>
+                    <th>Contact Number</th>
+                    <th>discription of Product</th>
+                    <th>ownerlocation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="InsecticideTable">
+                <!-- Job data will be added here by JavaScript code -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/login&regi/index.js" type="module"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+        const db = getDatabase();
+        
+        var userid;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                userid = user.uid;
+                console.log(userid);
+            } else {
+
+            }
+        });
+
+
+        logout.addEventListener('click', (e) => {
+
+            signOut(auth).then(() => {
+                window.location.assign("/login&regi/index.html", '_self');
+                alert("Succesfully User Logout....!!");
+            }).catch((error) => {
+                // An error happened.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+        });
+
+
+        // Reference to the data node you want to retrieve
+        const dataRef = ref(database, "TheInsecticides");
+
+        // Attach a listener for data changes
+        onValue(dataRef, (snapshot) => {
+            const data = snapshot.val();
+        }, (error) => {
+            console.error("Error fetching data:", error);
+        });
+
+
+        // Get a reference to the job data in the database
+        const InsecticidessRef = ref(database, "TheInsecticides");
+
+        // Listen for changes to the job data in the database
+        onValue(InsecticidessRef, (snapshot) => {
+            const InsecticidessData = snapshot.val();
+
+            // Clear the existing job data in the table
+            const InsecticidesTable = document.getElementById("InsecticideTable");
+            InsecticidesTable.innerHTML = "";
+
+            // Loop through the job data and display it in the table
+            for (const InsecticidesId in InsecticidessData) {
+                const Insecticides = InsecticidessData[InsecticidesId];
+
+                let string1 = InsecticidesId+"";
+                
+                // Create a new row in the table
+                const newRow = InsecticidesTable.insertRow();
+
+                // Add the job data to the row
+                const imageURLCell = newRow.insertCell();
+                const img = document.createElement("img");
+                img.src = Insecticides.imageURL;
+                img.width = 150;
+                img.height = 100;
+                imageURLCell.appendChild(img);
+
+                const CostofproductCell = newRow.insertCell();
+                CostofproductCell.innerHTML = Insecticides.Costofproduct;
+
+                const OwnernameCell = newRow.insertCell();
+                OwnernameCell.innerHTML = Insecticides.Ownername;
+
+                const InsecticidesNameCell = newRow.insertCell();
+                InsecticidesNameCell.innerHTML = Insecticides.Insecticidename;
+
+                const contactCell = newRow.insertCell();
+                contactCell.innerHTML = Insecticides.contactnumber;
+
+                const DiscriptionCell = newRow.insertCell();
+                DiscriptionCell.innerHTML = Insecticides.discriptionofproduct;
+
+                const ownerlocationCell = newRow.insertCell();
+                ownerlocationCell.innerHTML = Insecticides.ownerlocation;
+
+
+                const deleteButtonCell = newRow.insertCell();
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButtonCell.appendChild(deleteButton);
+                // Add an event listener to the delete button to delete the corresponding data
+                
+                  
+                deleteButton.addEventListener("click", () => {
+                        if (confirm("Are you sure you want to delete this data?")) {
+
+                            if(string1.includes(userid)){
+                                remove(child(InsecticidessRef, InsecticidesId))
+                                .then(() => {
+                                    alert("Data deleted successfully");
+                                    console.log("Data deleted successfully");
+                                })
+                                .catch((error) => {
+                                    console.error("Error deleting data:", error);
+                                    alert("Error deleting data:", error);
+                                });
+                                console.log("you are creater");
+                            }else{
+                                alert("You are not creater of this Post. You cannot delete this Post");
+                            }
+
+                        }
+                    });
+                
+                  
+                }
+            }
+        
+            , (error) => {
+                console.error("Error fetching data:", error);
+
+            }
+        );
+
+        
+        const dropdown = document.getElementById('dropdown');
+  
+  dropdown.addEventListener('change', function() {
+    const selectedOption = dropdown.options[dropdown.selectedIndex].value;
+    if (selectedOption === 'option1') {
+      window.location.href = '/Add type/addcrop.html';
+    } else if (selectedOption === 'option2') {
+      window.location.href = '/Add type/jobs.html';
+    } else if (selectedOption === 'option3') {
+      window.location.href = '/Add type/Insecticide.html';
+    } else if (selectedOption === 'option4') {
+      window.location.href = '/Add type/Pesticides.html';
+    } else if (selectedOption === 'option5') {
+      window.location.href = '/Add type/Addselling.html';
+    }
+  });
+
+
+    </script>
+
+
+</body>
+
+</html>

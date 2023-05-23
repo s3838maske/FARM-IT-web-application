@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addjob</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/btnstyle.css">
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/job_page/job.html" target="_self">Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="jobform">
+            <div id="addjobform" class="addjobform">
+                <h2 class="job_title">Add Job Details</h2>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="jobtitle" required>
+                    <label for="Add Job Title">Add Job Title</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="name" required>
+                    <label for="Enter Name">Enter Name</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="location" required>
+                    <label for="Add Job Location">Add Job Location</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="Discriptionjob" required>
+                    <label for="Enter Discription Of Job">Enter Discription Of Job</label>
+                </div>
+                <div class="input-box">
+                    <input name="number" type="number" class="form-control" id="Contactnumber" required>
+                    <label for="Add Contact Number">Add Contact Number</label>
+                </div>
+                <div class="input-box">
+                    <input name="jobdate" type="date" class="form-control" id="jobdate">
+                    <label for="Add Job Joinnig Date">Add Job Joinnig Date</label>
+                </div>
+                <button type="submit" class="btn" id="CreateJobbtn" required>Create Job</button>
+            </div>
+        </div>
+
+        <script src="/login&regi/index.js"></script>
+
+        <script type="module">
+
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+            import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+                "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+            const firebaseConfig = {
+                apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+                authDomain: "farmit-web.firebaseapp.com",
+                databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+                projectId: "farmit-web",
+                storageBucket: "farmit-web.appspot.com",
+                messagingSenderId: "474780629673",
+                appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const auth = getAuth();
+            const db = getDatabase();
+
+
+            var userid;
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in, see docs for a list of available properties
+                    // https://firebase.google.com/docs/reference/js/firebase.User
+                    userid = user.uid;
+
+                } else {
+
+                }
+            });
+
+            const jobname = document.getElementById("jobtitle");
+            const Name = document.getElementById("name");
+            const joblocation = document.getElementById("location");
+            const Contact = document.getElementById("Contactnumber");
+            const Jobdate = document.getElementById("jobdate");
+            const Discription = document.getElementById("Discriptionjob");
+
+
+            const createJobbtn = document.getElementById("CreateJobbtn");
+
+            createJobbtn.addEventListener('click', validateData);
+
+            function validateData() {
+
+                const jobname = document.getElementById("jobtitle").value.trim();
+                const Name = document.getElementById("name").value.trim();
+                const Contact = document.getElementById("Contactnumber").value.trim();
+                const Jobdate = document.getElementById("jobdate").value.trim();
+
+                if (jobname === "") {
+                    alert("Please enter Job name.");
+                    jobname.focus();
+                    return false;
+                }
+                if (!/^[A-Za-z\s]+$/.test(jobname)) {
+                    alert("job name should only contain alphabets");
+                    return;
+                }
+                if (Name === "") {
+                    alert("Please enter your name.");
+                    Name.focus();
+                    return false;
+                }
+                if (!/^[A-Za-z\s]+$/.test(Name)) {
+                    alert("Owner name should only contain alphabets");
+                    return;
+                }
+                if (joblocation.value.trim() === "") {
+                    alert("Please enter job location.");
+                    joblocation.focus();
+                    return false;
+                }
+                if (Contact  === "") {
+                    alert("Please enter contact number.");
+                    Contact.focus();
+                    return false;
+                }
+                if (!/^\d{10}$/.test(Contact)) {
+                    alert("Contact number should be 10 digits");
+                    return;
+                }
+                if (Jobdate  === "") {
+                    alert("Please enter job date.");
+                    Jobdate.focus();
+                    return false;
+                }
+                
+                if (Discription === "") {
+                alert("Please enter a description of the Job");
+                return;
+            }
+
+                // if all fields are valid, call InsertData() function to add data to database
+                InsertData();
+            }
+
+            function InsertData() {
+
+
+                set(ref(db, "Thejobs/" + userid + "" + Math.floor(Math.random() * 100)), {
+                    Jobname: jobname.value,
+                    name: Name.value,
+                    Joblocation: joblocation.value,
+                    contactnumber: Contact.value,
+                    jobdate: Jobdate.value,
+                    Discriptionofjob: Discription.value,
+                })
+                    .then(() => {
+                        alert("Job Create Succesfully..!!");
+                    })
+                    .catch((error) => {
+                        alert("unSuccesfully..!!" + error);
+                        console.log(error);
+                    });
+            }
+        </script>
+
+
+
+</body>
+
+</html>

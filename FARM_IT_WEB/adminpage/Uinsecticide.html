@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insecticide_page</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/adminpage/table.css">
+        <link rel="stylesheet" href="/btnstyle.css">
+</head>
+
+<body>
+    <nav class="nav-bar">
+
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/adminpage/adminprofile.html">Profile</a></li>
+            <li><a href="/adminpage/alluser.html">Users</a></li>
+            <li><a href="/adminpage/Uinsecticide.html">Insecticide</a></li>
+            <li><a href="/adminpage/Upesticide.html">Pesticides</a></li>
+            <li><a href="/adminpage/Ujob.html">Job</a></li>
+            <li><a href="/adminpage/Uinstruments.html">Instrument</a></li>
+            <li><a id="logout" target="_self">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="tableform">
+        <table>
+            <thead>
+                <tr>
+                    <th>image</th>
+                    <th>Cost of product</th>
+                    <th>Ownername</th>
+                    <th>Insecticide Name</th>
+                    <th>Contact Number</th>
+                    <th>discription of Product</th>
+                    <th>ownerlocation</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="InsecticideTable">
+                <!-- Job data will be added here by JavaScript code -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/login&regi/index.js" type="module"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+        const db = getDatabase();
+        var userid;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                const userid = user.uid;
+            } else {
+
+            }
+        });
+
+
+        logout.addEventListener('click', (e) => {
+
+            signOut(auth).then(() => {
+                window.location.assign("/login&regi/index.html", '_blank');
+                alert("Admin Succesfully Logout....!!");
+            }).catch((error) => {
+                // An error happened.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+        });
+
+
+        // Reference to the data node you want to retrieve
+        const dataRef = ref(database, "TheInsecticides");
+
+        // Attach a listener for data changes
+        onValue(dataRef, (snapshot) => {
+            const data = snapshot.val();
+        }, (error) => {
+            console.error("Error fetching data:", error);
+        });
+
+
+        // Get a reference to the job data in the database
+        const InsecticidessRef = ref(database, "TheInsecticides");
+
+        // Listen for changes to the job data in the database
+        onValue(InsecticidessRef, (snapshot) => {
+            const InsecticidessData = snapshot.val();
+
+            // Clear the existing job data in the table
+            const InsecticidesTable = document.getElementById("InsecticideTable");
+            InsecticidesTable.innerHTML = "";
+
+            // Loop through the job data and display it in the table
+            for (const InsecticidesId in InsecticidessData) {
+                const Insecticides = InsecticidessData[InsecticidesId];
+
+                // Create a new row in the table
+                const newRow = InsecticidesTable.insertRow();
+
+                // Add the job data to the row
+                const imageURLCell = newRow.insertCell();
+                const img = document.createElement("img");
+                img.src = Insecticides.imageURL;
+                img.width = 150;
+                img.height = 100;
+                imageURLCell.appendChild(img);
+
+                const CostofproductCell = newRow.insertCell();
+                CostofproductCell.innerHTML = Insecticides.Costofproduct;
+
+                const OwnernameCell = newRow.insertCell();
+                OwnernameCell.innerHTML = Insecticides.Ownername;
+
+                const InsecticidesNameCell = newRow.insertCell();
+                InsecticidesNameCell.innerHTML = Insecticides.Insecticidename;
+
+                const contactCell = newRow.insertCell();
+                contactCell.innerHTML = Insecticides.contactnumber;
+
+                const DiscriptionCell = newRow.insertCell();
+                DiscriptionCell.innerHTML = Insecticides.discriptionofproduct;
+
+                const ownerlocationCell = newRow.insertCell();
+                ownerlocationCell.innerHTML = Insecticides.ownerlocation;
+
+                const updateButtonCell = newRow.insertCell();
+                const updateButton = document.createElement("button");
+                updateButton.textContent = "Edit";
+                updateButtonCell.appendChild(updateButton);
+
+                // Add an event listener to the update button to update the corresponding data
+                updateButton.addEventListener("click", () => {
+                    const newCostofproduct = prompt("Enter new Cost of product :");
+                    const newOwnername = prompt("Enter new Owner name :");
+                    const newInsecticidename = prompt("Enter new Insecticide name:");
+                    const newcontactnumber = prompt("Enter new contact number :");
+                    const newdiscriptionofproduct = prompt("Enter new discription of product :");
+                    const newownerlocation = prompt("Enter new owner location :");
+                    
+                    if (newOwnername.trim() === "" || newOwnername.length > 20) {
+                        alert("Please enter a non-empty name that is less than 20 characters long.");
+                        return;
+                    }
+                    const validcontact = /^\d{10}$/;
+                    if (!validcontact.test(newcontactnumber)) {
+                        alert("Please enter a non-empty number that is less than 10 numbers long.");
+                        return;
+                    }
+                    if (newcontactnumber.trim() === "" ) {
+                        alert("Please enter a non-empty number that is less than 10 numbers long.");
+                        return;
+                    }
+                    if (newCostofproduct.trim() === "" || newCostofproduct.length > 4) {
+                        alert("Please enter a non-empty number that is less than 4 numbers long.");
+                        return;
+                    }
+                    const updates = {
+                        Costofproduct: newCostofproduct,
+                        Ownername: newOwnername,
+                        Insecticidename: newInsecticidename,
+                        contactnumber: newcontactnumber,
+                        discriptionofproduct: newdiscriptionofproduct,
+                        ownerlocation: newownerlocation,
+                    };
+                    update(child(InsecticidessRef, InsecticidesId), updates)
+                        .then(() => {
+                            alert("Data updated successfully");
+                            console.log("Data updated successfully");
+                        })
+                        .catch((error) => {
+                            console.error("Error updating data:", error);
+                            alert("Error updating data:", error);
+                        });
+                });
+
+                const deleteButtonCell = newRow.insertCell();
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButtonCell.appendChild(deleteButton);
+
+                // Add an event listener to the delete button to delete the corresponding data
+                deleteButton.addEventListener("click", () => {
+                    if (confirm("Are you sure you want to delete this data?")) {
+                        remove(child(InsecticidessRef, InsecticidesId))
+                            .then(() => {
+                                alert("Data deleted successfully");
+                                console.log("Data deleted successfully");
+                            })
+                            .catch((error) => {
+                                console.error("Error deleting data:", error);
+                                alert("Error deleting data:", error);
+                            });
+                    }
+                });
+            }
+        });
+
+
+        
+
+    </script>
+
+
+</body>
+
+</html>

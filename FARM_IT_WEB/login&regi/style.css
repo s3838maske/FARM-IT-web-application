@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap');
+@media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'poppins', sans-serif;
+}
+
+body {
+    background: url(/img_file/1598247.jpg) repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    background-attachment: fixed;
+}
+
+img {
+    width: 70px;
+}
+
+.nav-bar {
+    height: 80px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.575);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
+}
+
+.nav-bar .logo {
+    color: #fff;
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 80px;
+    padding: -1 100px;
+}
+
+.nav-bar ul {
+    list-style: none;
+    float: right;
+    margin-right: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-bar li {
+    display: inline-block;
+    line-height: 80px;
+    margin: 1px -3px;
+    margin-right: 5px;
+}
+
+.nav-bar li a {
+    color: #fff9f9;
+    font-size: 17px;
+    text-transform: capitalize;
+    padding: 7px 25px;
+    font-weight: 500;
+    text-decoration: none;
+    
+   
+}
+nav ul li select {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px;
+    width: 125px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    color: #fff9f9;
+    font-size: 17px;
+    text-transform: capitalize;
+    padding: 7px 25px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    
+  }
+  
+  nav ul li select option {
+    background: transparent;
+    color: #000000;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  nav ul li select:hover{
+    transition: .3s;
+    background-color: rgb(236, 161, 21);
+    opacity: 0.7;
+    border-bottom: 10px;
+    border-radius: 10px;
+  }
+
+li a:hover {
+    transition: .3s;
+    border-bottom: 10px;
+    background-color: rgb(236, 161, 21);
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+.MainButton {
+    width: 100px;
+    height: 40px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    font-size: 15px;
+    outline: none;
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 20px;
+}
+
+.MainButton:focus {
+    color: #fff;
+    background: rgb(3, 88, 247);
+    border: none;
+}
+
+.MainButton:hover {
+    background-color: rgb(3, 88, 247);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2px;
+    margin: 1px;
+}
+
+.form-box {
+    position: relative;
+    width: 420px;
+    height: 516px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+    transform: scale(0)
+}
+.jobform{
+    position: relative;
+    width: 420px;
+    height: 650px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 5%;
+
+}
+
+.cropform{
+    position: relative;
+    width: 350px;
+    height: 550px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 35%;
+    margin-top: 3%;
+}
+
+.sellingform{
+    position: relative;
+    width: 420px;
+    height: 850px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 10%;
+    margin-top: 2%;
+    
+}
+
+ .Registerform {
+    position: relative;
+    width: 400px;
+    height: 570px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.adminLoginform{
+    position: relative;
+    width: 420px;
+    height: 450px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+    transform: scale(0)
+}
+
+.adminLoginform{
+    padding: 1px;
+    margin: 14px auto;
+    transform: scale(1)
+}
+
+.Registerform {
+   
+    padding: 1px;
+    margin: 14px auto;
+    transform: scale(1)
+    
+}
+
+.Loginform-box {
+    transform: scale(1)
+}
+
+.Registerform {
+    position: absolute;
+    transition: .3s;
+    right: 40%;
+}
+
+
+
+.forgotform {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background: rgba(0, 0, 0, 0.575);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.forgotform {
+   
+    padding: 1px;
+    margin: 14px auto;
+    transform: scale(1)
+    
+}
+
+.forgotform{
+    transform: scale(1)
+}
+
+
+h2 {
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    margin: 30px 0;
+    width: 310px;
+    border-bottom: 2px solid #fff;
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 0 35px 0 5px;
+    color: #fff;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 16px;
+    pointer-events: none;
+    transition: .3s;
+
+}
+
+input:focus~label,
+input:valid~label {
+    top: -5px;
+}
+
+.remember-password {
+    margin: -15px 0 15px;
+    font-size: .9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember-password span a {
+    color: #6fb1fc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: .4s;
+}
+.remember-password span a:hover{
+    color: rgb(52, 55, 255);
+}
+
+.remember-password input {
+    accent-color: rgb(50, 146, 255);
+    margin-right: 3px;
+}
+
+.btn {
+    background: rgb(24, 78, 255);
+    width: 100%;
+    height: 45px;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 2px;
+    padding: 1px;
+}
+
+.creation-account {
+    color: #fff;
+    text-align: center;
+    margin-top: 5px;
+    line-height: 35px;
+}
+
+.creation-account a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: .4s;
+}
+
+.creation-account a:hover {
+    color: rgb(0, 153, 255);
+    
+}
+
+ion-icon {
+    position: absolute;
+    right: 8px;
+    top: 20px;
+    font-size: 1.2em;
+    color: #fff;
+}
+
+
+
+.nav-bar li button {
+    color: #000000;
+    font-size: 17px;
+    text-transform: capitalize;
+    padding: 7px 25px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+li button:hover {
+
+    transition: .3s;
+    border-bottom: 9px;
+    background-color: rgb(236, 161, 21);
+    border-radius: 10px;
+}
+
+a.active {
+    background-color: cornflowerblue;
+    border-radius: 10px;
+}
+.nav-bar ul li a {
+    cursor: pointer;
+}

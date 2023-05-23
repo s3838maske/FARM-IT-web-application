@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FARM-IT</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        nav ul a {
+            width: 100px;
+            height: 55px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            font-size: 15px;
+            outline: none;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 20px;
+            padding: 7px 20px;
+            text-decoration: none;
+        }
+
+        ul a:focus {
+
+            background: rgb(3, 88, 247);
+            border: none;
+        }
+
+        ul a:hover {
+            background-color: rgb(3, 88, 247);
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul>
+            <button class="MainButton" onclick="mainlog()" target="_self">Login</button>
+            <a href="/login&regi/admin.html" class="Adminbtn" onclick="mainadmin()" target="_self">Admin</a>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="form-box Loginform">
+            <div class="form-value">
+                <h2>LOG IN</h2>
+                <div class="input-box">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="email" id="email" class="email" required>
+                    <label for="">Email</label>
+                </div>
+                <div class="input-box">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <input type="password" id="password" class="password" required>
+                    <label for="">Password</label>
+                </div>
+                <div class="remember-password">
+                    <span><input type="checkbox">Remmember Me</span>
+                    <div class="forget">
+                        <span><a href="forgot.html" target="_self">Forgot Password?</a></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" value="login" id="login">Login</button>
+
+                <div class="creation-account">
+                   <div><span>Don't have an account ? </div>                     
+                        <div>
+                           <small style="margin-right: 20px;">Click here for register > > ></small><a href="register.html" class="Registerbtn" onclick="mainreg()" target="_self">Register</a>
+                        </div>
+                        <div>
+                            <small style="margin-right: 30px;" >Click here for admin > > ></small><a href="admin.html" class="Registerbtn" onclick="mainadmin()" target="_self">Admin</a>
+                        </div>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script src="index.js"></script>
+        <script type="module">
+
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+            import { getDatabase, set, ref, child, update, remove } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+                "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+            const firebaseConfig = {
+                apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+                authDomain: "farmit-web.firebaseapp.com",
+                databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+                projectId: "farmit-web",
+                storageBucket: "farmit-web.appspot.com",
+                messagingSenderId: "474780629673",
+                appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const auth = getAuth();
+
+
+            login.addEventListener('click', (e) => {
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+                if (!emailRegex.test(email)) {
+                    alert("Please enter a valid email address");
+                    return;
+                }
+
+                // Password validation
+                if (password.length < 6) {
+                    alert("Password must be at least 6 characters long");
+                    return;
+                }
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((result) => {
+                        // Signed in
+                        window.location.assign("/home_page/home.html", '_blank');
+                        alert(email + " Log In Succesfully....!!");
+
+                        console.log(result);
+                        // ...
+                    })
+                    .catch((error) => {
+
+                        const errorMessage = error.message;
+                        console.log(errorMessage);
+                        alert("Please enter valid email and password..!!!");
+                    });
+
+            });
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Forgot</title>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.19.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.19.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.19.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul>
+            <li><a href="index.html" onclick="mainlog()" target="_self">BACK TO LOGIN</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="forgotform">
+            <div class="form-value">
+                <h2>Password E-mail</h2>
+                <div class="input-box">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="email" id="email" class="email" required>
+                    <label for="">Email</label>
+                </div>
+                <button type="submit" class="btn" id="forgot">Reset Now</button>
+            </div>
+        </div>
+        <script src="index.js"></script>
+        <script type="module">
+
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+            import { getDatabase, set, ref, child, update, remove } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from
+                "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+            const firebaseConfig = {
+                apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+                authDomain: "farmit-web.firebaseapp.com",
+                databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+                projectId: "farmit-web",
+                storageBucket: "farmit-web.appspot.com",
+                messagingSenderId: "474780629673",
+                appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const auth = getAuth();
+
+
+        
+            forgot.addEventListener('click', (e) =>  {
+                const email = document.getElementById("email").value;
+                console.log(email)
+                sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert("Link sent on this email "+ email);
+
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                    // ..
+                });
+            });
+
+        </script>
+
+</body>
+
+</html>

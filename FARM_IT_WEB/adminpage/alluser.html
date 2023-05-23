@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>crops</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/btnstyle.css">
+    <link rel="stylesheet" href="/adminpage/table.css">
+</head>
+
+<body>
+    <nav class="nav-bar">
+
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/adminpage/adminprofile.html">Profile</a></li>
+            <li><a href="/adminpage/alluser.html">Users</a></li>
+            <li><a href="/adminpage/Uinsecticide.html">Insecticide</a></li>
+            <li><a href="/adminpage/Upesticide.html">Pesticides</a></li>
+            <li><a href="/adminpage/Ujob.html">Job</a></li>
+            <li><a href="/adminpage/Uinstruments.html">Instrument</a></li>
+            <li><a id="logout" target="_self">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="tableform">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Contact Number</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                <!-- Job data will be added here by JavaScript code -->
+            </tbody>
+        </table>
+    </div>
+    <script src="/login&regi/index.js"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+        const db = getDatabase();
+        var userid;
+
+        var userid;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                const userid = user.uid;
+            } else {
+
+            }
+        });
+
+
+        logout.addEventListener('click', (e) => {
+
+            signOut(auth).then(() => {
+                window.location.assign("/login&regi/index.html", '_blank');
+                alert("Admin Succesfully Logout....!!");
+            }).catch((error) => {
+                // An error happened.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+        });
+
+
+        const userRef = ref(database, "users");
+
+        onValue(userRef, (snapshot) => {
+            const userData = snapshot.val();
+
+            const userTable = document.getElementById("userTable");
+            userTable.innerHTML = "";
+
+            for (const userId in userData) {
+                const user = userData[userId];
+
+                const newRow = userTable.insertRow();
+                const UsernameCell = newRow.insertCell();
+                UsernameCell.innerHTML = user.username;
+                
+                const ContactCell = newRow.insertCell();
+                ContactCell.innerHTML = user.Contact;
+                
+                const emailCell = newRow.insertCell();
+                emailCell.innerHTML = user.email;
+
+                const passwordCell = newRow.insertCell();
+                passwordCell.innerHTML = user.Password;
+
+            }
+                });
+            
+
+</script>

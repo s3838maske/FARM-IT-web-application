@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <title>cropform</title>
+    <link rel="stylesheet" href="/btnstyle.css">
+    <style>
+        button {
+            border: white;
+            outline: 2px;
+            display: block;
+            padding: 4px;
+            color: white;
+            background-color: #000000;
+            text-align: center;
+            cursor: pointer;
+            width: 70%;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/crops/crops.html" target="_self">Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="cropform">
+        <div id="addcropform" class="addcropform">
+            <h2 class="job_title">Add Crop Details</h2>
+            <div class="input-box">
+                <input name="text" type="text" class="form-control" id="cropname" required>
+                <label for="Add Crop Name">Add Crop Name</label>
+            </div>
+            <div class="input-box">
+                <input name="cropdate" type="date" class="form-control" id="cropdate">
+                <label for="Date of crop planting">Date of crop planting</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="namebox" required><label id="extlab"></label>
+                    <img id="myimg">
+                    <label id="upprogress" style="left: 100px;"></label>
+                    <label></label>
+                    <button id="selimg">Select Image</button required>
+                    <button id="updimg">Upload Image</button>
+            </div>
+            <button type="submit" class="btn" id="addcrop">Add Crop</button>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="/login&regi/index.js"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+        const db = getDatabase();
+        
+
+        var files = {};
+        var reader = new FileReader();
+        var cropname = document.getElementById("cropname");
+        var cropdate = document.getElementById("cropdate");
+        var namebox = document.getElementById("namebox");
+        var extlab = document.getElementById("extlab");
+        var myimg = document.getElementById("myimg");
+        var upprogress = document.getElementById("upprogress");
+        var selimg = document.getElementById("selimg");
+        var updimg = document.getElementById("updimg");
+
+        var userid;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                userid = user.uid;
+            } else {
+
+            }
+        });
+
+        var input = document.createElement("input");
+        input.type = 'file';
+
+        input.onchange = e => {
+            files = e.target.files;
+
+            var extension = GetFileExt(files[0]);
+            var name = GetFileName(files[0]);
+            // console.log(files[0].name,files,name,extension);
+            namebox.value = name;
+            extlab.innerHTML = extension;
+
+            reader.readAsDataURL(files[0]);
+        }
+
+        reader.onload = function () {
+            myimg.src = reader.result;
+
+        }
+
+        selimg.onclick = function () {
+            input.click();
+        }
+
+        function GetFileExt(file) {
+            var temp = file.name.split('.');
+            var ext = temp.slice((temp.length - 1), (temp.length));
+            return '.' + ext[0];
+        }
+
+        function GetFileName(file) {
+            var temp = file.name.split('.');
+            return temp[0] + "";
+        }
+
+
+        var imUrl;
+        async function UploadProcess() {
+            var ImgToUpload = files[0];
+
+            var ImgName = namebox.value + extlab.innerHTML;
+
+            if (!ValidateName()) {
+                alert(' name cannot contain "." ,"#", "$","[","]"');
+                return;
+            }
+
+            const metaData = {
+                contentType: ImgToUpload.type
+            }
+            const storage = getStorage();
+            const storageRef = sRef(storage, "Image/" + ImgName);
+            const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+
+            UploadTask.on('state-changed', (snapshot) => {
+                var progess = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                upprogress.innerHTML = "upload " + progess + "%";
+            },
+                (error) => {
+                    alert("error: image not upload...!");
+                },
+                () => {
+                    getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) => {
+                        imUrl = downloadURL;
+                        console.log(downloadURL);
+                    });
+                }
+            );
+        }
+
+        
+
+        function SaveURLtoRealtimDB(URL) {
+            var name = namebox.value;
+            var ext = extlab.innerHTML;
+
+            set(ref(db, "imageurl/" + name), {
+                imagename: (name + ext),
+                imgurl: URL
+            });
+        }
+
+        updimg.onclick = UploadProcess;
+
+        const addcrop = document.getElementById("addcrop");
+
+        addcrop.addEventListener('click', validate);
+
+        function validate() {
+            const cropname = document.getElementById("cropname").value;
+            const cropdate = document.getElementById("cropdate").value;
+            if (cropname === '') {
+                alert("Please enter a crop name");
+                return;
+            }
+            if (!/^[A-Za-z\s]+$/.test(cropname)) {
+                alert("crop name should only contain alphabets");
+                return;
+            }
+            // Validate crop date
+            if (cropdate === '') {
+                alert("Please select a crop date");
+                return;
+            }
+           
+         // if all fields are valid, call InsertData() function to add data to database
+            InsertData();
+        }
+
+        function InsertData() {
+
+            set(ref(db, "TheUserCrop/" + userid + "" + Math.floor(Math.random() * 100)), {
+                CropName: cropname.value,
+                CropDate: cropdate.value,
+                imageURL: imUrl
+            })
+                .then(() => {
+                    
+                    alert("Crop Adding Succesfully..!!");
+                })
+                .catch((error) => {
+                    alert("unSuccesfully..!!" + error);
+                    console.log(error);
+                });
+        }
+
+
+        function ValidateName() {
+            var regex = /[\.#$\[\]]/
+            return !(regex.test(namebox.value));
+        }
+
+
+
+    </script>
+</body>
+
+</html>

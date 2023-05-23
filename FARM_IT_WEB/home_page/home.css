@@ -1,0 +1,126 @@
+/* General styles */
+
+
+/* Header styles */
+h1 {
+    background-color: #0077c0;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+
+/* Main content styles */
+main {
+    background-color: #0000009a;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+section h2 {
+    font-size: 24px;
+    background-color: #0077c0;
+    color: #fff;
+}
+
+section ul li {
+    margin-bottom: 10px;
+}
+
+section p {
+    color: #000000;
+    font-size: 18px;
+    text-align: left;
+    word-spacing: 2px;
+    line-height: 30px;
+    background-color: rgba(129, 160, 121, 0.952);
+    border-radius: 5px;
+    margin: 14px;
+    padding: 8px;
+    font-style: italic;
+    border: 1px solid black;
+
+}
+.slogun{
+    text-align: center;
+}
+
+/* Footer styles */
+footer {
+    background-color: #eee;
+    border-top: 1px solid #ddd;
+    color: #555;
+    font-size: 14px;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+section ul{
+    background-color: rgba(0, 255, 221, 0.336);
+    text-align: center;
+}
+section ul a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-style: oblique;
+    
+}
+
+section ul a:hover {
+    color: rgb(0, 0, 0);
+    text-decoration: underline;
+}
+.slider {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+  }
+  
+  .slides {
+    display: flex;
+    width: 400%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slides img {
+    width: 25%;
+    height: 100%;
+    object-fit: fill;
+  }
+  
+  .controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 89%;
+    margin: 0 auto;
+  }
+  
+  #indexbtn {
+    font-size: 24px;
+    color: white;
+    background-color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  #indexbtn:hover {
+    background-color: gray;
+  }

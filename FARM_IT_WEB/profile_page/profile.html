@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/profile_page/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    <nav class="nav-bar">
+
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/home_page/home.html" target="_self">Home</a></li>
+            <li><a href="/profile_page/profile.html" target="_self">Profile</a></li>
+            <li><a href="/crops/crops.html" target="_self">Crops</a></li>
+            <li><a href="/insecticide/insecticide.html" target="_self">Insecticide</a></li>
+            <li><a href="/pesticide/pesticide.html" target="_self">Pesticides</a></li>
+            <li><a href="/job_page/job.html" target="_self">Job</a></li>
+            <li><a href="/sell_page/sell.html" target="_self">Instrument</a></li>
+            <li><select id="dropdown">
+                    <option value="#">Add</option>
+                    <option value="option1">Add Crops</option>
+                    <option value="option2">Add Jobs</option>
+                    <option value="option3">Add Insecticide</option>
+                    <option value="option4">Add Pesticides</option>
+                    <option value="option5">Add Instrument</option>
+                </select></li>
+            <li><a id="logout" target="_self">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2 style="text-align:center" class="profiletitle">User Profile </h2>
+            <img src="/img_file/Avatar-Profile-PNG-Images.png" alt="Farmer Profile" style="width:45%">
+            <h5 id="farmeremail">Email Address</h5>
+            <input type="text" class="User_eamil" id="User_eamil" disabled>
+            <p class="title">FARMER</p>
+
+            <div style="margin: 24px 0;">
+                <a href="https://www.twitter.com" target="_self"><i class="fa fa-twitter"></i></a>
+                <a href="https://www.linkedin.com" target="_self"><i class="fa fa-linkedin"></i></a>
+                <a href="https://www.facebook.com" target="_self"><i class="fa fa-facebook"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/login&regi/index.js"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove, onValue } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+        const db = getDatabase();
+        var userid;
+
+        const user = auth.currentUser;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user != null) {
+                    var email_id = user.email;
+
+                    document.getElementById("User_eamil").value = email_id;
+                }
+            } else {
+                // User is signed out
+                // ...
+            }
+        });
+
+        logout.addEventListener('click', (e) => {
+
+            signOut(auth).then(() => {
+                window.location.assign("/login&regi/index.html", '_blank');
+                alert("Succesfully User Logout....!!");
+            }).catch((error) => {
+                // An error happened.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+        });
+
+       
+
+        const dropdown = document.getElementById('dropdown');
+
+        dropdown.addEventListener('change', function () {
+            const selectedOption = dropdown.options[dropdown.selectedIndex].value;
+            if (selectedOption === 'option1') {
+                window.location.href = '/Add type/addcrop.html';
+            } else if (selectedOption === 'option2') {
+                window.location.href = '/Add type/jobs.html';
+            } else if (selectedOption === 'option3') {
+                window.location.href = '/Add type/Insecticide.html';
+            } else if (selectedOption === 'option4') {
+                window.location.href = '/Add type/Pesticides.html';
+            } else if (selectedOption === 'option5') {
+                window.location.href = '/Add type/Addselling.html';
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

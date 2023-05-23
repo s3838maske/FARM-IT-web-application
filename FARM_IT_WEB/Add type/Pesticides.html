@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesticides form</title>
+    <link rel="stylesheet" href="/login&regi/style.css">
+    <link rel="stylesheet" href="/btnstyle.css">
+    <style>
+        button {
+            border: white;
+            outline: 2px;
+            display: block;
+            padding: 4px;
+            color: white;
+            background-color: #000000;
+            text-align: center;
+            cursor: pointer;
+            width: 70%;
+            font-size: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <img src="/img_file/pngegg.png" alt="">
+
+        <label for="" class="logo">FARM IT</label>
+        <ul id='navList'>
+            <li><a href="/pesticide/pesticide.html" target="_self">Back</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="sellingform">
+            <div id="addproductform" class="addproductform">
+                <h2 class="selling_title">Add Pesticides</h2>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="Pesticidesname" required>
+                    <label for="Add Item Name">Add Name</label>
+                </div>
+                <div class="input-box">
+                    <input name="number" type="number" class="form-control" id="Itemcost" required>
+                    <label for="Add Item Cost">Add Item Cost</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="OwnerLocation" required>
+                    <label for="Add Owner Location">Enter Owner Location</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="OwnerName" required>
+                    <label for="Enter Owner Name">Enter Owner Name</label>
+                </div>
+                <div class="input-box">
+                    <input name="number" type="number" class="form-control" id="Contactnumber" required>
+                    <label for="Add Contact Number">Add Contact Number</label>
+                </div>
+                <div class="input-box">
+                    <input name="text" type="text" class="form-control" id="DiscriptionProduct" required>
+                    <label for="Enter Discription Of Product">Enter Discription Of Product</label>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="namebox" required><label id="extlab"></label>
+                    <img id="myimg">
+                    <label id="upprogress" style="left: 100px;"></label>
+                    <label></label>
+                    <button id="selimg">Select Image</button required>
+                    <button id="updimg">Upload Image</button>
+                </div>
+                <button type="submit" class="btn" id="Addproduct">ADD</button>
+            </div>
+        </div>
+    </div>
+    <script src="/login&regi/index.js"></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, set, ref, child, update, remove } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+
+        import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-storage.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGi8F5t4ClqlqmlEv_D4fDQ2Vxm5nBbNk",
+            authDomain: "farmit-web.firebaseapp.com",
+            databaseURL: "https://farmit-web-default-rtdb.firebaseio.com",
+            projectId: "farmit-web",
+            storageBucket: "farmit-web.appspot.com",
+            messagingSenderId: "474780629673",
+            appId: "1:474780629673:web:9df3930b353c1ad0eb87b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth();
+        const db = getDatabase();
+        var userid;
+
+
+        var files = {};
+        var reader = new FileReader();
+        var Pesticidesname = document.getElementById("Pesticidesname");
+        var itemcost = document.getElementById("Itemcost");
+        var ownerlocation = document.getElementById("OwnerLocation");
+        var owername = document.getElementById("OwnerName");
+        var contact = document.getElementById("Contactnumber");
+        var Discription = document.getElementById("DiscriptionProduct");
+        var namebox = document.getElementById("namebox");
+        var extlab = document.getElementById("extlab");
+        var myimg = document.getElementById("myimg");
+        var upprogress = document.getElementById("upprogress");
+        var selimg = document.getElementById("selimg");
+        var updimg = document.getElementById("updimg");
+
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, see docs for a list of available properties
+                // https://firebase.google.com/docs/reference/js/firebase.User
+                userid = user.uid;
+
+            } else {
+
+            }
+        });
+
+        const addproduct = document.getElementById("Addproduct");
+
+        addproduct.addEventListener('click', validation);
+
+        function validation() {
+            const Pesticidesname = document.getElementById("Pesticidesname").value.trim();
+            const itemcost = document.getElementById("Itemcost").value.trim();
+            const ownerlocation = document.getElementById("OwnerLocation").value.trim();
+            const owername = document.getElementById("OwnerName").value.trim();
+            const contact = document.getElementById("Contactnumber").value.trim();
+            const Discription = document.getElementById("DiscriptionProduct").value.trim();
+
+
+            // Validate inputs
+            if (itemcost.value === "") {
+                alert("Please enter a valid item cost");
+                return;
+            }
+            if (Pesticidesname.value === "") {
+                alert("Please enter an Pesticides name");
+                return;
+            }
+            
+            if (ownerlocation.value === "") {
+                alert("Please enter owner location");
+                return;
+            }
+            if (owername.value === "") {
+                alert("Please enter owner name");
+                return;
+            }
+            if (!/^[A-Za-z\s]+$/.test(owername)) {
+                alert("Owner name should only contain alphabets");
+                return;
+            }
+            if (contact.value === "") {
+                alert("Please enter a valid contact number");
+                return;
+            }
+            if (!/^\d{10}$/.test(contact)) {
+                alert("Contact number should be 10 digits");
+                return;
+            }
+            if (Discription.value === "") {
+                alert("Please enter a description of the product");
+                return;
+            }
+            InsertData();
+        }
+
+        var input = document.createElement("input");
+        input.type = 'file';
+
+        input.onchange = e => {
+            files = e.target.files;
+
+            var extension = GetFileExt(files[0]);
+            var name = GetFileName(files[0]);
+            // console.log(files[0].name,files,name,extension);
+            namebox.value = name;
+            extlab.innerHTML = extension;
+
+            reader.readAsDataURL(files[0]);
+        }
+
+        reader.onload = function () {
+            myimg.src = reader.result;
+
+        }
+
+        selimg.onclick = function () {
+            input.click();
+        }
+        function GetFileExt(file) {
+            var temp = file.name.split('.');
+            var ext = temp.slice((temp.length - 1), (temp.length));
+            return '.' + ext[0];
+        }
+
+        function GetFileName(file) {
+            var temp = file.name.split('.');
+            return temp[0] + "";
+        }
+
+
+        var imUrl;
+        async function UploadProcess() {
+            var ImgToUpload = files[0];
+
+            var ImgName = namebox.value + extlab.innerHTML;
+
+            if (!ValidateName()) {
+                alert(' name cannot contain "." ,"#", "$","[","]"');
+                return;
+            }
+
+
+            const metaData = {
+                contentType: ImgToUpload.type
+            }
+            const storage = getStorage();
+            const storageRef = sRef(storage, "Image/" + ImgName);
+            const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+
+            UploadTask.on('state-changed', (snapshot) => {
+                var progess = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                upprogress.innerHTML = "upload " + progess + "%";
+            },
+                (error) => {
+                    alert("error: image not upload...!");
+                },
+                () => {
+                    getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) => {
+                        imUrl = downloadURL;
+                        console.log(downloadURL);
+                    });
+                }
+            );
+        }
+
+
+        function SaveURLtoRealtimDB(URL) {
+            var name = namebox.value;
+            var ext = extlab.innerHTML;
+            set(ref(db, "imageurl/" + name), {
+                imagename: (name + ext),
+                imgurl: URL
+            });
+        }
+        updimg.onclick = UploadProcess;
+
+
+        function InsertData() {
+
+            set(ref(db, "ThePesticides/" + userid + "" + Math.floor(Math.random() * 100)), {
+                Costofproduct: itemcost.value,
+                Pesticidesname: Pesticidesname.value,
+                ownerlocation: ownerlocation.value,
+                Ownername: owername.value,
+                contactnumber: contact.value,
+                discriptionofproduct: Discription.value,
+                imageURL: imUrl,
+            })
+                .then(() => {
+                    alert("Adding Succesfully..!!");
+                })
+                .catch((error) => {
+                    alert("unSuccesfully..!!" + error);
+                    console.log(error);
+                });
+        }
+
+
+        function ValidateName() {
+            var regex = /[\.#$\[\]]/
+            return !(regex.test(namebox.value));
+        }
+    </script>
+</body>
+
+</html>

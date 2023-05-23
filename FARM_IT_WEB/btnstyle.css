@@ -1,0 +1,21 @@
+
+button{
+    background: rgb(24, 78, 255);
+    width: 50%;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: grab;
+    margin: 2px;
+    padding: 1px;
+}
+
+button:hover{
+    transition: .3s;
+    border-bottom: 9px;
+    background:  rgb(3, 41, 165);
+}
